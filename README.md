@@ -1,2 +1,2 @@
-# aprspruner
-APRS Database Pruning Daemon
+# aprsinject
+APRS Injection Daemon
