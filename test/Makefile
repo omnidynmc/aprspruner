@@ -88,7 +88,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = x86_64-unknown-linux-gnu
 host_triplet = x86_64-unknown-linux-gnu
-noinst_PROGRAMS = injecttest$(EXEEXT) validatortest$(EXEEXT)
+noinst_PROGRAMS = injecttest$(EXEEXT)
 subdir = test
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -113,14 +113,6 @@ am__v_lt_1 =
 injecttest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(injecttest_LDFLAGS) $(LDFLAGS) -o $@
-am_validatortest_OBJECTS = validatortest.$(OBJEXT) Validator.$(OBJEXT) \
-	UnitTest.$(OBJEXT)
-validatortest_OBJECTS = $(am_validatortest_OBJECTS)
-validatortest_LDADD = $(LDADD)
-validatortest_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) $(validatortest_LDFLAGS) $(LDFLAGS) \
-	-o $@
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -136,8 +128,7 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/include
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/UnitTest.Po ./$(DEPDIR)/Validator.Po \
-	./$(DEPDIR)/injecttest.Po ./$(DEPDIR)/validatortest.Po
+am__depfiles_remade = ./$(DEPDIR)/injecttest.Po
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -157,8 +148,8 @@ AM_V_CXXLD = $(am__v_CXXLD_$(V))
 am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(injecttest_SOURCES) $(validatortest_SOURCES)
-DIST_SOURCES = $(injecttest_SOURCES) $(validatortest_SOURCES)
+SOURCES = $(injecttest_SOURCES)
+DIST_SOURCES = $(injecttest_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -314,8 +305,6 @@ top_builddir = ..
 top_srcdir = ..
 injecttest_SOURCES = injecttest.cpp
 injecttest_LDFLAGS = -lopenframe -lstomp -laprs
-validatortest_SOURCES = validatortest.cpp ../src/Validator.cpp UnitTest.cpp
-validatortest_LDFLAGS = -lopenframe
 all: all-am
 
 .SUFFIXES:
@@ -363,20 +352,13 @@ injecttest$(EXEEXT): $(injecttest_OBJECTS) $(injecttest_DEPENDENCIES) $(EXTRA_in
 	@rm -f injecttest$(EXEEXT)
 	$(AM_V_CXXLD)$(injecttest_LINK) $(injecttest_OBJECTS) $(injecttest_LDADD) $(LIBS)
 
-validatortest$(EXEEXT): $(validatortest_OBJECTS) $(validatortest_DEPENDENCIES) $(EXTRA_validatortest_DEPENDENCIES) 
-	@rm -f validatortest$(EXEEXT)
-	$(AM_V_CXXLD)$(validatortest_LINK) $(validatortest_OBJECTS) $(validatortest_LDADD) $(LIBS)
-
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/UnitTest.Po # am--include-marker
-include ./$(DEPDIR)/Validator.Po # am--include-marker
 include ./$(DEPDIR)/injecttest.Po # am--include-marker
-include ./$(DEPDIR)/validatortest.Po # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -404,20 +386,6 @@ am--depfiles: $(am__depfiles_remade)
 #	$(AM_V_CXX)source='$<' object='$@' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(LTCXXCOMPILE) -c -o $@ $<
-
-Validator.o: ../src/Validator.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Validator.o -MD -MP -MF $(DEPDIR)/Validator.Tpo -c -o Validator.o `test -f '../src/Validator.cpp' || echo '$(srcdir)/'`../src/Validator.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/Validator.Tpo $(DEPDIR)/Validator.Po
-#	$(AM_V_CXX)source='../src/Validator.cpp' object='Validator.o' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Validator.o `test -f '../src/Validator.cpp' || echo '$(srcdir)/'`../src/Validator.cpp
-
-Validator.obj: ../src/Validator.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT Validator.obj -MD -MP -MF $(DEPDIR)/Validator.Tpo -c -o Validator.obj `if test -f '../src/Validator.cpp'; then $(CYGPATH_W) '../src/Validator.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/Validator.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/Validator.Tpo $(DEPDIR)/Validator.Po
-#	$(AM_V_CXX)source='../src/Validator.cpp' object='Validator.obj' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o Validator.obj `if test -f '../src/Validator.cpp'; then $(CYGPATH_W) '../src/Validator.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/Validator.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -550,10 +518,7 @@ clean-am: clean-generic clean-libtool clean-noinstPROGRAMS \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/UnitTest.Po
-	-rm -f ./$(DEPDIR)/Validator.Po
-	-rm -f ./$(DEPDIR)/injecttest.Po
-	-rm -f ./$(DEPDIR)/validatortest.Po
+		-rm -f ./$(DEPDIR)/injecttest.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -599,10 +564,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/UnitTest.Po
-	-rm -f ./$(DEPDIR)/Validator.Po
-	-rm -f ./$(DEPDIR)/injecttest.Po
-	-rm -f ./$(DEPDIR)/validatortest.Po
+		-rm -f ./$(DEPDIR)/injecttest.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
