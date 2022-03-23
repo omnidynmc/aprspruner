@@ -80,8 +80,10 @@ namespace aprspruner {
       _workers.pop_front();
     } // while
 
-    _stats->stop();
-    delete _stats;
+    if (_stats) {
+      _stats->stop();
+      delete _stats;
+    } // if
   } // App::onDeinitializeThreads
 
   bool App::onRun() {
