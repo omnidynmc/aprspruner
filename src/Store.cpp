@@ -97,8 +97,8 @@ namespace aprspruner {
       assert(false);
     } // catch
 
-    _memcached = new MemcachedController(_memcached_host);
-    _memcached->expire(_expire_interval);
+    //_memcached = new MemcachedController(_memcached_host);
+    //_memcached->expire(_expire_interval);
 
     _profile = new openframe::Stopwatch();
     _profile->add("memcached.callsign", 300);
