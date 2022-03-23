@@ -110,19 +110,6 @@ namespace aprspruner {
   } // Worker::init_stompstats
 
   void Worker::onDescribeStats() {
-    describe_stat("num.frames.out", "worker"+thread_id_str()+"/num frames out", openstats::graphTypeCounter, openstats::dataTypeInt);
-    describe_stat("num.frames.in", "worker"+thread_id_str()+"/num frames in", openstats::graphTypeCounter, openstats::dataTypeInt);
-    describe_stat("num.bytes.out", "worker"+thread_id_str()+"/num bytes out", openstats::graphTypeCounter, openstats::dataTypeInt);
-    describe_stat("num.bytes.in", "worker"+thread_id_str()+"/num bytes in", openstats::graphTypeCounter, openstats::dataTypeInt);
-
-    describe_stat("num.work.in", "worker"+thread_id_str()+"/num work in", openstats::graphTypeGauge, openstats::dataTypeInt, openstats::useTypeSum);
-    describe_stat("num.work.out", "worker"+thread_id_str()+"/work out", openstats::graphTypeGauge, openstats::dataTypeInt, openstats::useTypeSum);
-    describe_stat("num.result.queue", "worker"+thread_id_str()+"/num result queue", openstats::graphTypeGauge, openstats::dataTypeInt, openstats::useTypeSum);
-    describe_stat("num.aprs.rejects", "worker"+thread_id_str()+"/aprs rejects", openstats::graphTypeGauge, openstats::dataTypeInt, openstats::useTypeSum);
-    describe_stat("num.aprs.duplicates", "worker"+thread_id_str()+"/aprs duplicates", openstats::graphTypeGauge, openstats::dataTypeInt, openstats::useTypeSum);
-    describe_stat("num.aprs.position.error", "worker"+thread_id_str()+"/aprs position errors", openstats::graphTypeGauge, openstats::dataTypeInt, openstats::useTypeSum);
-    describe_stat("num.aprs.deferred", "worker"+thread_id_str()+"/aprs deferred", openstats::graphTypeGauge, openstats::dataTypeInt, openstats::useTypeSum);
-    describe_stat("num.aprs.errors", "worker"+thread_id_str()+"/aprs errors", openstats::graphTypeGauge, openstats::dataTypeInt, openstats::useTypeSum);
     describe_stat("num.sql.inserted", "worker"+thread_id_str()+"/sql inserted", openstats::graphTypeGauge, openstats::dataTypeInt, openstats::useTypeSum);
     describe_stat("num.sql.failed", "worker"+thread_id_str()+"/sql failed", openstats::graphTypeGauge, openstats::dataTypeInt, openstats::useTypeSum);
     describe_stat("time.run", "worker"+thread_id_str()+"/run loop time", openstats::graphTypeGauge, openstats::dataTypeFloat, openstats::useTypeMean);
@@ -165,7 +152,7 @@ namespace aprspruner {
     if (_stompstats.last_report_at > time(NULL) - _stompstats.report_interval) return;
 
     datapoint("aprs_stats.delete.packet", _stompstats.aprs_stats.packet);
-    datapoint("aprs_stats.delete.position", _stompstats.aprs_stats.raw);
+    datapoint("aprs_stats.delete.raw", _stompstats.aprs_stats.raw);
 
     init_stompstats(_stompstats);
   } // Worker::try_stompstats
