@@ -82,9 +82,9 @@ namespace aprspruner {
             << " LIMIT " << limit;
 
       query.execute();
+      num_affected_rows = query.affected_rows();
 
       trans.commit();
-      num_affected_rows = query.affected_rows();
     } // try (transaction)
     catch(const mysqlpp::BadQuery &e) {
       TLOG(LogWarn, << "*** MySQL++ Error{Delete::packet}: #"
@@ -113,9 +113,9 @@ namespace aprspruner {
             << " LIMIT " << limit;
 
       query.execute();
+      num_affected_rows = query.affected_rows();
 
       trans.commit();
-      num_affected_rows = query.affected_rows();
     } // try (transaction)
     catch(const mysqlpp::BadQuery &e) {
       TLOG(LogWarn, << "*** MySQL++ Error{Delete::raw}: #"
