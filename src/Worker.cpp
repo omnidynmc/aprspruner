@@ -131,7 +131,7 @@ namespace aprspruner {
     describe_stat("time.write.event", "worker"+thread_id_str()+"/write event time", openstats::graphTypeGauge, openstats::dataTypeFloat, openstats::useTypeMean);
 
     // APRS Packet Stats
-    describe_stat("aors_stats.delete.packet", "aprs/stats/delete/packet", openstats::graphTypeCounter);
+    describe_stat("aprs_stats.delete.packet", "aprs/stats/delete/packet", openstats::graphTypeCounter);
     describe_stat("aprs_stats.delete.raw", "aprs/stats/delete/raw", openstats::graphTypeCounter);
   } // Worker::onDescribeStats
 
