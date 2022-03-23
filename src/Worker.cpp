@@ -22,7 +22,7 @@ namespace aprspruner {
 
   const int Worker::kDefaultStompPrefetch	= 1024;
   const time_t Worker::kDefaultStatsInterval	= 3600;
-  const time_t Worker::kDefaultDeleteInterval	= 1;
+  const time_t Worker::kDefaultDeleteInterval	= 30;
   const char *Worker::kStompDestErrors		= "/topic/feeds.aprs.is.errors";
 
   Worker::Worker(const openframe::LogObject::thread_id_t thread_id,
