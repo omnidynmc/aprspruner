@@ -97,21 +97,7 @@ namespace aprspruner {
 
       struct aprs_stats_t {
         unsigned int packet;
-        unsigned int position;
-        unsigned int message;
-        unsigned int telemetry;
-        unsigned int status;
-        unsigned int capabilities;
-        unsigned int peet_logging;
-        unsigned int weather;
-        unsigned int dx;
-        unsigned int experimental;
-        unsigned int beacon;
-        unsigned int unknown;
-        unsigned int reject_invparse;
-        unsigned int reject_duplicate;
-        unsigned int reject_tosoon;
-        unsigned int reject_tofast;
+        unsigned int raw;
       }; // aprs_stats_t
 
       struct obj_stats_t {

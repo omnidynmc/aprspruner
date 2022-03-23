@@ -131,40 +131,8 @@ namespace aprspruner {
     describe_stat("time.write.event", "worker"+thread_id_str()+"/write event time", openstats::graphTypeGauge, openstats::dataTypeFloat, openstats::useTypeMean);
 
     // APRS Packet Stats
-    describe_stat("aprs_stats.rate.packet", "aprs stats/rate/packet", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.position", "aprs stats/rate/positions", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.message", "aprs stats/rate/message", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.telemetry", "aprs stats/rate/telemetry", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.status", "aprs stats/rate/status", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.capabilities", "aprs stats/rate/capabilities", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.peet_logging", "aprs stats/rate/peet_logging", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.weather", "aprs stats/rate/weather", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.dx", "aprs stats/rate/dx", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.experimental", "aprs stats/rate/experimental", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.beacon", "aprs stats/rate/beacon", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.unknown", "aprs stats/rate/unknown", openstats::graphTypeCounter);
-
-    describe_stat("aprs_stats.rate.reject.invparse", "aprs stats/rate/reject/invparse", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.reject.duplicate", "aprs stats/rate/reject/duplicate", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.reject.tofast", "aprs stats/rate/reject/tofast", openstats::graphTypeCounter);
-    describe_stat("aprs_stats.rate.reject.tosoon", "aprs stats/rate/reject/tosoon", openstats::graphTypeCounter);
-
-    describe_stat("aprs_stats.ratio.position", "aprs stats/ratio/positions", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.message", "aprs stats/ratio/message", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.telemetry", "aprs stats/ratio/telemetry", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.status", "aprs stats/ratio/status", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.capabilities", "aprs stats/ratio/capabilities", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.peet_logging", "aprs stats/ratio/peet_logging", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.weather", "aprs stats/ratio/weather", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.dx", "aprs stats/ratio/dx", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.experimental", "aprs stats/ratio/experimental", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.beacon", "aprs stats/ratio/beacon", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.unknown", "aprs stats/ratio/unknown", openstats::graphTypeGauge, openstats::dataTypeFloat);
-
-    describe_stat("aprs_stats.ratio.reject.invparse", "aprs stats/ratio/reject/invparse", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.reject.duplicate", "aprs stats/ratio/reject/duplicate", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.reject.tosoon", "aprs stats/ratio/reject/too soon", openstats::graphTypeGauge, openstats::dataTypeFloat);
-    describe_stat("aprs_stats.ratio.reject.tofast", "aprs stats/ratio/reject/too fast", openstats::graphTypeGauge, openstats::dataTypeFloat);
+    describe_stat("aors_stats.delete.packet", "aprs/stats/delete/packet", openstats::graphTypeCounter);
+    describe_stat("aprs_stats.delete.raw", "aprs/stats/delete/raw", openstats::graphTypeCounter);
   } // Worker::onDescribeStats
 
   void Worker::onDestroyStats() {
@@ -177,16 +145,13 @@ namespace aprspruner {
     if (_stats.last_report_at > time(NULL) - _stats.report_interval) return;
 
     int diff = time(NULL) - _stats.last_report_at;
-    double pps = double(_stats.packets) / diff;
-    double fps_in = double(_stats.frames_in) / diff;
-    double fps_out = double(_stats.frames_out) / diff;
+    double ppm = double(_stompstats.aprs_stats.packet) / diff;
+    double rpm = double(_stompstats.aprs_stats.raw) / diff;
 
-    TLOG(LogNotice, << "Stats packets " << _stats.packets
-                    << ", pps " << pps << "/s"
-                    << ", frames in " << _stats.frames_in
-                    << ", fps in " << fps_in << "/s"
-                    << ", frames out " << _stats.frames_out
-                    << ", fps out " << fps_out << "/s"
+    TLOG(LogNotice, << "Deletes packets " << _stompstats.aprs_stats.packet
+                    << ", ppm " << ppm << "/m"
+                    << ", raw " << _stompstats.aprs_stats.raw
+                    << ", rpm " << rpm << "/m"
                     << ", next in " << _stats.report_interval
                     << ", connect attempts " << _stats.connects
                     << "; " << _stomp->connected_to()
@@ -199,39 +164,8 @@ namespace aprspruner {
   void Worker::try_stompstats() {
     if (_stompstats.last_report_at > time(NULL) - _stompstats.report_interval) return;
 
-    datapoint("aprs_stats.rate.packet", _stompstats.aprs_stats.packet);
-    datapoint("aprs_stats.rate.position", _stompstats.aprs_stats.position);
-    datapoint("aprs_stats.rate.message", _stompstats.aprs_stats.message);
-    datapoint("aprs_stats.rate.telemetry", _stompstats.aprs_stats.telemetry);
-    datapoint("aprs_stats.rate.status", _stompstats.aprs_stats.status);
-    datapoint("aprs_stats.rate.capabilities", _stompstats.aprs_stats.capabilities);
-    datapoint("aprs_stats.rate.peet_logging", _stompstats.aprs_stats.peet_logging);
-    datapoint("aprs_stats.rate.weather", _stompstats.aprs_stats.weather);
-    datapoint("aprs_stats.rate.dx", _stompstats.aprs_stats.dx);
-    datapoint("aprs_stats.rate.experimental", _stompstats.aprs_stats.experimental);
-    datapoint("aprs_stats.rate.beacon", _stompstats.aprs_stats.beacon);
-    datapoint("aprs_stats.rate.unknown", _stompstats.aprs_stats.unknown);
-
-    datapoint("aprs_stats.rate.reject.invparse", _stompstats.aprs_stats.reject_invparse);
-    datapoint("aprs_stats.rate.reject.duplicate", _stompstats.aprs_stats.reject_duplicate);
-    datapoint("aprs_stats.rate.reject.tofast", _stompstats.aprs_stats.reject_tofast);
-    datapoint("aprs_stats.rate.reject.tosoon", _stompstats.aprs_stats.reject_tosoon);
-
-    datapoint_float("aprs_stats.ratio.position", OPENSTATS_PERCENT(_stompstats.aprs_stats.position, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.message", OPENSTATS_PERCENT(_stompstats.aprs_stats.message, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.telemetry", OPENSTATS_PERCENT(_stompstats.aprs_stats.telemetry, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.status", OPENSTATS_PERCENT(_stompstats.aprs_stats.status, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.capabilities", OPENSTATS_PERCENT(_stompstats.aprs_stats.capabilities, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.peet_logging", OPENSTATS_PERCENT(_stompstats.aprs_stats.peet_logging, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.weather", OPENSTATS_PERCENT(_stompstats.aprs_stats.weather, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.dx", OPENSTATS_PERCENT(_stompstats.aprs_stats.dx, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.experimental", OPENSTATS_PERCENT(_stompstats.aprs_stats.experimental, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.beacon", OPENSTATS_PERCENT(_stompstats.aprs_stats.beacon, _stompstats.aprs_stats.packet) );
-
-    datapoint_float("aprs_stats.ratio.reject.invparse", OPENSTATS_PERCENT(_stompstats.aprs_stats.reject_invparse, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.reject.duplicate", OPENSTATS_PERCENT(_stompstats.aprs_stats.reject_duplicate, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.reject.tofast", OPENSTATS_PERCENT(_stompstats.aprs_stats.reject_tofast, _stompstats.aprs_stats.packet) );
-    datapoint_float("aprs_stats.ratio.reject.tosoon", OPENSTATS_PERCENT(_stompstats.aprs_stats.reject_tosoon, _stompstats.aprs_stats.packet) );
+    datapoint("aprs_stats.delete.packet", _stompstats.aprs_stats.packet);
+    datapoint("aprs_stats.delete.position", _stompstats.aprs_stats.raw);
 
     init_stompstats(_stompstats);
   } // Worker::try_stompstats
@@ -253,11 +187,14 @@ namespace aprspruner {
     size_t num_packets_deleted = _store->deletePacketsByAge(3600, 2000);
     size_t num_raw_deleted = _store->deleteRawByAge(3600, 2000);
 
-    TLOG(LogNotice, << "Delete packets "
-                    << num_packets_deleted
-                    << ", raw "
-                    << num_raw_deleted
-                    << std::endl);
+    _stompstats.aprs_stats.packet += num_packets_deleted;
+    _stompstats.aprs_stats.raw += num_raw_deleted;
+
+//    TLOG(LogNotice, << "Delete packets "
+//                    << num_packets_deleted
+//                    << ", raw "
+//                    << num_raw_deleted
+//                    << std::endl);
 
   } // worker::try_locators
 } // namespace aprsoruner
