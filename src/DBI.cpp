@@ -82,7 +82,6 @@ namespace aprspruner {
             << " LIMIT " << limit;
 
       query.execute();
-      query = _sqlpp->query();
 
       trans.commit();
       num_affected_rows = query.affected_rows();
@@ -114,7 +113,6 @@ namespace aprspruner {
             << " LIMIT " << limit;
 
       query.execute();
-      query = _sqlpp->query();
 
       trans.commit();
       num_affected_rows = query.affected_rows();
