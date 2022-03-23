@@ -78,7 +78,7 @@ namespace aprspruner {
       mysqlpp::Query query = _sqlpp->query();
 
       query << "DELETE FROM packet WHERE create_ts < "
-            << time() - age
+            << time(NULL) - age
             << " LIMIT " << limit;
 
       query.execute();
@@ -110,7 +110,7 @@ namespace aprspruner {
       mysqlpp::Query query = _sqlpp->query();
 
       query << "DELETE FROM raw WHERE create_ts < "
-            << time() - age
+            << time(NULL) - age
             << " LIMIT " << limit;
 
       query.execute();
