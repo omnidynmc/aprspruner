@@ -95,6 +95,7 @@ namespace aprspruner {
     stats.connects = 0;
     stats.disconnects = 0;
     stats.packets = 0;
+    stats.raw = 0;
     stats.frames_in = 0;
     stats.frames_out = 0;
 
