@@ -177,6 +177,7 @@ namespace aprspruner {
     _stompstats.aprs_stats.packet += num_packets_deleted;
     _stompstats.aprs_stats.raw += num_raw_deleted;
 
+    if (num_packets_deleted > 0 || num_raw_deleted > 0)
     TLOG(LogNotice, << "Delete packets "
                     << num_packets_deleted
                     << ", raw "
