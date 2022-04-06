@@ -132,12 +132,12 @@ namespace aprspruner {
     if (_stats.last_report_at > time(NULL) - _stats.report_interval) return;
 
     int diff = time(NULL) - _stats.last_report_at;
-    double ppm = double(_stompstats.aprs_stats.packet) / diff;
-    double rpm = double(_stompstats.aprs_stats.raw) / diff;
+    double ppm = double(_stats.packets) / diff;
+    double rpm = double(_stats.raw) / diff;
 
-    TLOG(LogNotice, << "Deletes packets " << _stompstats.aprs_stats.packet
+    TLOG(LogNotice, << "Deletes packets " << _stats.packets
                     << ", ppm " << ppm << "/m"
-                    << ", raw " << _stompstats.aprs_stats.raw
+                    << ", raw " << _stats.raw
                     << ", rpm " << rpm << "/m"
                     << ", next in " << _stats.report_interval
                     << ", connect attempts " << _stats.connects
@@ -176,6 +176,8 @@ namespace aprspruner {
 
     _stompstats.aprs_stats.packet += num_packets_deleted;
     _stompstats.aprs_stats.raw += num_raw_deleted;
+    _stats.packets += num_packets_deleted;
+    _stats.raw += num_raw_deleted;
 
     if (num_packets_deleted > 0 || num_raw_deleted > 0)
     TLOG(LogNotice, << "Delete packets "
