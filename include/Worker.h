@@ -104,6 +104,7 @@ namespace aprspruner {
         unsigned int connects;
         unsigned int disconnects;
         unsigned int packets;
+        unsigned int raw;
         unsigned int frames_in;
         unsigned int frames_out;
         time_t report_interval;
