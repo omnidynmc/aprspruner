@@ -171,8 +171,8 @@ namespace aprspruner {
   void Worker::try_deletes() {
     if ( !_delete_intval->is_next() ) return;
 
-    size_t num_packets_deleted = _store->deletePacketsByAge(86400 * 30, 2000);
-    size_t num_raw_deleted = _store->deleteRawByAge(86400, 2000);
+    size_t num_packets_deleted = _store->deletePacketsByAge(86400 * 5, 2000);
+    size_t num_raw_deleted = _store->deleteRawByAge(3600*4, 2000);
 
     _stompstats.aprs_stats.packet += num_packets_deleted;
     _stompstats.aprs_stats.raw += num_raw_deleted;
