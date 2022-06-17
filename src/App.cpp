@@ -125,6 +125,11 @@ namespace aprspruner {
                                );
 
     worker->set_elogger( a->elogger(), a->elog_name() );
+    worker->maxPacketAge(a->cfg->get_int("app.threads.worker.age.packet", 86400 * 10));
+    worker->maxPacketLimit(a->cfg->get_int("app.threads.worker.limit.packet", 2000));
+
+    worker->maxRawAge(a->cfg->get_int("app.threads.worker.age.packet", 86400));
+    worker->maxRawLimit(a->cfg->get_int("app.threads.worker.limit.raw", 2000));
 
     std::stringstream s;
     s << "aprspruner.worker" << id;

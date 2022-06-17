@@ -38,6 +38,10 @@ namespace aprspruner {
       static const time_t kDefaultStatsInterval;
       static const time_t kDefaultDeleteInterval;
       static const time_t kDefaultMemcachedExpire;
+      static const time_t kDefaultMaxPacketAge;
+      static const time_t kDefaultMaxRawAge;
+      static const size_t kDefaultMaxPacketLimit;
+      static const size_t kDefaultMaxRawLimit;
       static const char *kStompDestErrors;
       static const char *kStompDestRejects;
       static const char *kStompDestDuplicates;
@@ -58,6 +62,19 @@ namespace aprspruner {
       bool run();
       void try_stats();
       void try_deletes();
+
+      time_t maxPacketAge() const { return _max_packet_age; };
+      void maxPacketAge(const time_t age) { _max_packet_age = age; }
+
+      time_t maxRawAge() const { return _max_raw_age; }
+      void maxRawAge(const time_t age) { _max_raw_age = age; }
+
+      size_t maxPacketLimit() { return _max_packet_limit; }
+      void maxPacketLimit(const size_t limit) { _max_packet_limit = limit; }
+
+      size_t maxRawLimit() const { return _max_raw_limit; }
+      void maxRawLimit(const size_t limit) { _max_raw_limit = limit; }
+
 
       // ### Type Definitions ###
 
@@ -86,6 +103,11 @@ namespace aprspruner {
       std::string _db_pass;
       std::string _db_database;
       bool _drop_defer;
+
+      time_t _max_packet_age;
+      time_t _max_raw_age;
+      size_t _max_packet_limit;
+      size_t _max_raw_limit;
 
       Store *_store;
       stomp::Stomp *_stomp;

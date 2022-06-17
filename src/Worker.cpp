@@ -23,6 +23,10 @@ namespace aprspruner {
   const int Worker::kDefaultStompPrefetch	= 1024;
   const time_t Worker::kDefaultStatsInterval	= 3600;
   const time_t Worker::kDefaultDeleteInterval	= 10;
+  const time_t Worker::kDefaultMaxPacketAge     = 86400 * 10;
+  const time_t Worker::kDefaultMaxRawAge        = 86400;
+  const size_t Worker::kDefaultMaxPacketLimit   = 2000;
+  const size_t Worker::kDefaultMaxRawLimit      = 2000;
   const char *Worker::kStompDestErrors		= "/topic/feeds.aprs.is.errors";
 
   Worker::Worker(const openframe::LogObject::thread_id_t thread_id,
@@ -43,6 +47,11 @@ namespace aprspruner {
            _db_user(db_user),
            _db_pass(db_pass),
            _db_database(db_database) {
+
+    _max_packet_age = kDefaultMaxPacketAge;
+    _max_raw_age = kDefaultMaxRawAge;
+    _max_packet_limit = kDefaultMaxPacketLimit;
+    _max_raw_limit = kDefaultMaxRawLimit;
 
     _store = NULL;
     _stomp = NULL;
@@ -172,8 +181,12 @@ namespace aprspruner {
   void Worker::try_deletes() {
     if ( !_delete_intval->is_next() ) return;
 
-    size_t num_packets_deleted = _store->deletePacketsByAge(86400 * 5, 2000);
-    size_t num_raw_deleted = _store->deleteRawByAge(3600*4, 2000);
+    openframe::Stopwatch sw;
+
+    sw.Start();
+
+    size_t num_packets_deleted = _store->deletePacketsByAge(_max_packet_age, _max_packet_limit);
+    size_t num_raw_deleted = _store->deleteRawByAge(_max_raw_age, _max_raw_limit);
 
     _stompstats.aprs_stats.packet += num_packets_deleted;
     _stompstats.aprs_stats.raw += num_raw_deleted;
@@ -185,6 +198,9 @@ namespace aprspruner {
                     << num_packets_deleted
                     << ", raw "
                     << num_raw_deleted
+                    << " in "
+                    << round(sw.Time() * 1000)
+                    << " ms"
                     << std::endl);
 
   } // worker::try_locators
