@@ -91,6 +91,8 @@ namespace aprspruner {
                     << e.errnum()
                     << " " << e.what()
                     << std::endl);
+
+      if (e.errnum() == 2003) reconnect();
     } // catch
     catch(const mysqlpp::Exception &e) {
       TLOG(LogWarn, << "*** MySQL++ Error{Delete::packet}: "
@@ -122,6 +124,8 @@ namespace aprspruner {
                     << e.errnum()
                     << " " << e.what()
                     << std::endl);
+
+      if (e.errnum() == 2003) reconnect();
     } // catch
     catch(const mysqlpp::Exception &e) {
       TLOG(LogWarn, << "*** MySQL++ Error{Delete::raw}: "
